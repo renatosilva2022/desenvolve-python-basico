@@ -1,0 +1,6 @@
+1. Ler e armazenar o número n que deseja multiplicar por 9 #Entrada
+2. Subtrair n-1 para o primeiro digito e armazenar como digito1 #Processamento
+3. Subtrair 10-n para o segundo digito e armazenar como digito2 #Processamento
+4. Multiplicar 10 no primeiro digito (*) e armazenar para a dezena #Processamento
+5. Somar o primeiro digito com o segundo digito e armazenar a soma como resultado #Processamento. 
+6. Imprima: "O resultado de 9 x", n, "é igual a: ", resultado #Saída
