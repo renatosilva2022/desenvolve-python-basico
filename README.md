@@ -1,3 +1,3 @@
 # Projeto Desenvolve - Itabira
-# Programacao basica com python
+# Programacao basica com Python
 # PDITA462
