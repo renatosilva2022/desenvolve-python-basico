@@ -1,0 +1,225 @@
+import csv
+
+# Estruturas de dados para usuários e produtos
+usuarios = []
+produtos = []
+
+# Funções para gerenciar usuários
+def recupera_usuarios():
+    try:
+        with open('usuarios.csv', 'r') as file:
+            reader = csv.DictReader(file)
+            for row in reader:
+                usuarios.append(row)
+    except FileNotFoundError:
+        pass  # Arquivo não encontrado, continuar sem recupera usuários
+
+def grava_usuarios():
+    with open('usuarios.csv', 'w', newline='') as file:
+        writer = csv.DictWriter(file, fieldnames=["codigo", "nome", "senha", "tipo"])
+        writer.writeheader()
+        writer.writerows(usuarios)
+
+def cria_usuario(codigo, nome, senha, tipo):
+    usuarios.append({"codigo": codigo, "nome": nome, "senha": senha, "tipo": tipo})
+    grava_usuarios()
+
+def recupera_usuarios():
+    for usuario in usuarios:
+        print(usuario)
+
+def atualiza_usuario(codigo, nome, senha, tipo):
+    for usuario in usuarios:
+        if usuario["codigo"] == codigo:
+            usuario["nome"] = nome
+            usuario["senha"] = senha
+            usuario["tipo"] = tipo
+    grava_usuarios()
+
+def deleta_usuario(codigo):
+    global usuarios
+    usuarios = [usuario for usuario in usuarios if usuario["codigo"] != codigo
+    grava_usuarios()
+
+# Funções para gerenciar produtos
+def recupera_produtos():
+    try:
+        with open('produtos.csv', 'r') as file:
+            reader = csv.DictReader(file)
+            for row in reader:
+                row['preco'] = float(row['preco'])
+                row['quantidade'] = int(row['quant'])
+                produtos.append(row)
+    except FileNotFoundError:
+        pass  # Arquivo não encontrado, continuar sem recupera produtos
+
+def grava_produtos():
+    with open('produtos.csv', 'w', newline='') as file:
+        writer = csv.DictWriter(file, fieldnames=["codigo", "nome", "preco", "quantidade"])
+        writer.writeheader()
+        writer.writerows(produtos)
+
+def cria_produto(codigo, nome, preco, quant):
+    produtos.append({"codigo": codigo, "nome": nome, "preco": preco, "quantidade": quant})
+    grava_produtos()
+
+def recupera_produtos():
+    for produto in produtos:
+        print(produto)
+
+def atualiza_produto(codigo, nome, preco, quant):
+    for produto in produtos:
+        if produto["codigo"] == codigo:
+            produto["nome"] = nome
+            produto["preco"] = preco
+            produto["quantidade"] = quant
+    grava_produtos()
+
+def deleta_produto(codigo):
+    global produtos
+    produtos = [produto for produto in produtos if produto["Codigo"] != codigo]
+    grava_produtos()
+
+def recupera_produto(nome):
+    for produto in produtos:
+        if produto["nome"].lower() == nome.lower():
+            print(produto)
+
+def indexa_produtos_por_nome():
+    produtos_indexados = sorted(produtos, key=lambda x: x["nome"])
+    for produto in produtos_indexados:
+        print(produto)
+
+def indexa_produtos_por_preco():
+    produtos_indexados = sorted(produtos, key=lambda x: x["preco"])
+    for produto in produtos_indexados:
+        print(produto)
+
+# Funções auxiliares para login e controle de acesso
+def login(nome, senha):
+    for usuario in usuarios:
+        if usuario["nome"] == nome and usuario["senha"] == senha:
+            return usuario
+    return None
+
+def menu_gerente():
+    print("\nMenu Gerente")
+    print("1. recupera Usuários")
+    print("2. cria Usuário")
+    print("3. atualiza Usuário")
+    print("4. deleta Usuário")
+    print("5. recupera Produtos")
+    print("6. cria Produto")
+    print("7. atualiza Produto")
+    print("8. deleta Produto")
+    print("9. recupera Produto por Nome")
+    print("10. indexa Produtos por Nome")
+    print("11. indexa Produtos por Preço")
+    print("0. Sair")
+
+def menu_funcionario():
+    print("\nMenu Funcionário")
+    print("1. recupera Produtos")
+    print("2. atualiza Produto")
+    print("3. recupera Produto por Nome")
+    print("4. indexa Produtos por Nome")
+    print("5. indexa Produtos por Preço")
+    print("0. Sair")
+
+def menu_cliente():
+    print("\nMenu Cliente")
+    print("1. recupera Produtos")
+    print("2. recupera Produto por Nome")
+    print("0. Sair")
+
+# recupera dados iniciais
+recupera_usuarios()
+recupera_produtos()
+
+# Interface de login
+print("Seja bem-vindo ao sistema demo PD Itabira")
+nome = input("Nome de usuário: ")
+senha = input("Senha: ")
+
+usuario_logado = login(nome, senha)
+if usuario_logado:
+    tipo_usuario = usuario_logado["tipo"]
+    while True:
+        if tipo_usuario == "gerente":
+            menu_gerente()
+            op = input("Escolha uma opção: ")
+            if op == "1":
+                recupera_usuarios()
+            elif op == "2":
+                id = input("Codigo do novo usuário: ")
+                nome = input("Nome do novo usuário: ")
+                senha = input("Senha do novo usuário: ")
+                tipo = input("Tipo do novo usuário (gerente, funcionario, cliente, estagiario): ")
+                cria_usuario(codigo, nome, senha, tipo)
+            elif op == "3":
+                id = input("Codigo do usuário a ser atualizado: ")
+                nome = input("Novo nome do usuário: ")
+                senha = input("Nova senha do usuário: ")
+                tipo = input("Novo tipo do usuário: ")
+                atualiza_usuario(codigo, nome, senha, tipo)
+            elif op == "4":
+                id = input("Codigo do usuário a ser removido: ")
+                deleta_usuario(codigo)
+            elif op == "5":
+                recupera_produtos()
+            elif op == "6":
+                id = input("Codigo do novo produto: ")
+                nome = input("Nome do novo produto: ")
+                preco = float(input("Preço do novo produto: "))
+                quant = int(input("Quantidade do novo produto: "))
+                cria_produto(codigo, nome, preco, quant)
+            elif op == "7":
+                id = input("Codigo do produto a ser atualizado: ")
+                nome = input("Novo nome do produto: ")
+                preco = float(input("Novo preço do produto: "))
+                quant = int(input("Nova quantidade do produto: "))
+                atualiza_produto(codigo, nome, preco, quant)
+            elif op == "8":
+                id = input("Codigo do produto a ser removido: ")
+                deleta_produto(codigo)
+            elif op == "9":
+                nome = input("Nome do produto a recupera: ")
+                recupera_produto(nome)
+            elif op == "10":
+                indexa_produtos_por_nome()
+            elif op == "11":
+                indexa_produtos_por_preco()
+            elif op == "0":
+                break
+        elif tipo_usuario == "funcionario":
+            menu_funcionario()
+            op = input("Escolha uma opção: ")
+            if op == "1":
+                recupera_produtos()
+            elif op == "2":
+                id = input("Codigo do produto a ser atualizado: ")
+                nome = input("Novo nome do produto: ")
+                preco = float(input("Novo preço do produto: "))
+                quant = int(input("Nova quantidade do produto: "))
+                atualiza_produto(codigo, nome, preco, quant)
+            elif op == "3":
+                nome = input("Nome do produto a recupera: ")
+                recupera_produto(nome)
+            elif op == "4":
+                indexa_produtos_por_nome()
+            elif op == "5":
+                indexa_produtos_por_preco()
+            elif op == "0":
+                break
+        elif tipo_usuario == "cliente":
+            menu_cliente()
+            op = input("Escolha uma opção: ")
+            if op == "1":
+                recupera_produtos()
+            elif op == "2":
+                nome = input("Nome do produto a recupera: ")
+                recupera_produto(nome)
+            elif op == "0":
+                break
+else:
+    print("Usuário ou senha incorretos")

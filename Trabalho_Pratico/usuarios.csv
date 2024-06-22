@@ -1,0 +1,5 @@
+id,nome,senha,tipo
+1,admin,admin@123,gerente
+2,funcionario1,func@123,funcionario
+3,cliente1,cli@123,cliente
+4,estagiario1,estag@123, estagiario
